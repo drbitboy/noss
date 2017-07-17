@@ -44,8 +44,12 @@ tests: noss
 compare: noss
 	@make -f $(firstword $(MAKEFILE_LIST)) > noss.log
 	@USE_NOSS2= make -f $(firstword $(MAKEFILE_LIST)) > noss2.log
+	@NOSS_INPLACE= make -f $(firstword $(MAKEFILE_LIST)) > nossinplace.log
+	@USE_NOSS2= NOSS_INPLACE= make -f $(firstword $(MAKEFILE_LIST)) > noss2inplace.log
 	@diff -y --suppress-common-lines noss.log noss2.log | uniq
-	@echo "*** N.B. Success if result was one line of 'noss   | noss2'"
+	@diff -y --suppress-common-lines noss.log nossinplace.log | uniq
+	@diff -y --suppress-common-lines noss.log noss2inplace.log | uniq
+	@echo "*** N.B. Success if result was lines of 'noss   | noss2', 'noss | nossinplace', and 'noss | noss2inplace'"
 
 clean:
-	$(RM) noss noss.log noss2.log
+	$(RM) noss noss.log noss2.log nossinplace.log noss2inplace.log

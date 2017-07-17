@@ -116,9 +116,17 @@ int iArg;
       free(lon);
       return 2;
     }
+    modLon[iArg] = lon[iArg];
   }
 
-  fprintf(stdout,"%s\ntest_boostLon = %7.2lf\n", nossCall==noss ? "noss" : "noss2", nossCall(lon,modLon,argc));
+  fprintf(stdout,"%s%s\ntest_boostLon = %7.2lf\n"
+         , nossCall==noss ? "noss" : "noss2"
+         , getenv("NOSS_INPLACE") ? "inplace" : ""
+         , nossCall(getenv("NOSS_INPLACE") ? modLon : lon
+                   ,modLon
+                   ,argc
+                   )
+         );
 
   for (iArg=0; iArg<argc; ++iArg) {
     fprintf(stdout,"%7.2lf %7.2lf %8.2lf\n", lon[iArg], modLon[iArg], modLon[iArg]-lon[iArg]);
